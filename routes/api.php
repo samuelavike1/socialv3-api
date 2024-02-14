@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Route;
 //Authentication routes
 Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
+Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->group([
-    Route::get
-]);
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('create-profile', [\App\Http\Controllers\UserProfileController::class, 'store']);
+    Route::get('show-profile', [\App\Http\Controllers\UserProfileController::class, 'show']);
+    Route::post('update-profile', [\App\Http\Controllers\UserProfileController::class, 'update']);
+});

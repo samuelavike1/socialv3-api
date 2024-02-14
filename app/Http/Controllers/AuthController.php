@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'=>'string',
+            'username'=>'string',
             'phone'=>'string|required',
             'email'=>'string|required',
             'password'=> 'required|string',
@@ -23,8 +23,7 @@ class AuthController extends Controller
             'username' => $request['username'],
             'phone' => $request['phone'],
             'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-            'api_token' => Str::random(60),
+            'password' => $request['password'],
         ]);
 
         $result = ($save_data) ? ['message'=>'Success', $save_data,] : ['message'=>'Registration failed'];
@@ -60,8 +59,9 @@ class AuthController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message'=>'Logout Successfully']);
     }
 }
